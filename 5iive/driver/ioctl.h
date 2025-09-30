@@ -1,0 +1,23 @@
+#pragma once
+#include <ntddk.h>
+
+#define IOCTL_BASE 0x8000
+#define DEVICE_NAME L"\\Device\\FiveDriver"
+#define SYMBOLIC_LINK L"\\DosDevices\\FiveDriver"
+
+// IOCTL codes
+#define IOCTL_READ_MEMORY CTL_CODE(FILE_DEVICE_UNKNOWN, IOCTL_BASE + 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_WRITE_MEMORY CTL_CODE(FILE_DEVICE_UNKNOWN, IOCTL_BASE + 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_GET_CR3 CTL_CODE(FILE_DEVICE_UNKNOWN, IOCTL_BASE + 0x802, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+// Memory operation structures
+typedef struct _MEMORY_OPERATION {
+    ULONG_PTR ProcessId;
+    ULONG_PTR Address;
+    SIZE_T Size;
+    PVOID Buffer;
+} MEMORY_OPERATION, * PMEMORY_OPERATION;
+
+// Function declarations
+NTSTATUS CreateDevice(_In_ PDRIVER_OBJECT DriverObject);
+VOID DeleteDevice(_In_ PDRIVER_CONTEXT Context);
